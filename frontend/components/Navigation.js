@@ -17,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [showLogoutPrompt, setShowLogoutPrompt] = useState(false);
   const userMenuRef = useRef(null);
   const router = useRouter();
   const { isAuthenticated, user, logout, isLoading } = useAuth();
@@ -43,6 +44,7 @@ export default function Navigation() {
       if (e.key === 'Escape') {
         setIsUserMenuOpen(false);
         setIsOpen(false);
+        setShowLogoutPrompt(false);
       }
     };
     document.addEventListener('keydown', handleKey);
@@ -55,6 +57,26 @@ export default function Navigation() {
     router.push('/');
   };
 
+  // Clicking the logo while signed in asks whether to log out first, instead
+  // of silently taking an authenticated user back to the public homepage.
+  const handleLogoClick = (e) => {
+    if (isAuthenticated) {
+      e.preventDefault();
+      setShowLogoutPrompt(true);
+    }
+  };
+
+  const confirmLogoutAndGoHome = async () => {
+    setShowLogoutPrompt(false);
+    await logout();
+    router.push('/');
+  };
+
+  const stayLoggedInAndGoHome = () => {
+    setShowLogoutPrompt(false);
+    router.push('/');
+  };
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -12 }}
@@ -64,7 +86,7 @@ export default function Navigation() {
     >
       <nav role="navigation" aria-label="Main navigation" className="nav-flat">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+        <Link href="/" onClick={handleLogoClick} className="flex items-center gap-2.5 shrink-0 group">
           <span className="relative w-7 h-7 rounded-lg overflow-hidden bg-cream-50 ring-1 ring-white/15 flex-shrink-0">
             <Image src="/images/logo.png" alt="Abuhub" fill sizes="28px" className="object-cover" priority />
           </span>
@@ -261,6 +283,50 @@ export default function Navigation() {
                 )}
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Logout confirmation — shown when a signed-in user clicks the logo */}
+      <AnimatePresence>
+        {showLogoutPrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+            onClick={() => setShowLogoutPrompt(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-prompt-title"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.97 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="card-studio w-full max-w-sm p-6 sm:p-7 text-center"
+            >
+              <div className="w-12 h-12 rounded-full bg-brand-500/15 border border-brand-400/30 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl" aria-hidden="true">👋</span>
+              </div>
+              <h2 id="logout-prompt-title" className="text-lg font-bold font-poppins text-white mb-2">
+                Heading back home?
+              </h2>
+              <p className="text-cream-100/60 text-sm mb-6">
+                Would you like to log out of your Abuhub account, {user?.name?.split(' ')[0] || 'friend'}, or stay signed in?
+              </p>
+              <div className="flex flex-col gap-2.5">
+                <button onClick={confirmLogoutAndGoHome} className="btn-pill-ghost w-full !border-red-500/30 !text-red-400 hover:!bg-red-500/10">
+                  Log out
+                </button>
+                <button onClick={stayLoggedInAndGoHome} className="btn-pill-solid w-full">
+                  Stay signed in
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
