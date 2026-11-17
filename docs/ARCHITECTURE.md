@@ -1,7 +1,9 @@
 # Abuhub — Architecture Audit & Target Plan
 
-**Status:** Phase 0 (audit) complete. No destructive changes made. Written per the
-`ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md` blueprint's own Phase 0 instructions.
+**Status:** Phase 0 (audit) and Phase 1 (data-model foundation) complete. Owner has
+confirmed: keep the current brand/design, add the blueprint's platform functionality on
+top of it, phase by phase with a check-in after each. See `docs/ASSUMPTIONS.md` for the
+full decision record and what Phase 1 actually did.
 
 ---
 
@@ -24,11 +26,21 @@
 
 ## 2. Current data model (Prisma/SQLite, `backend/prisma/schema.prisma`)
 
+Pre-existing:
 - `User` — email, password hash, firstName/lastName, `role` (plain string, `USER`/`ADMIN`), lockout fields, email-verification fields (verification flow scaffolded but not wired to email sending).
 - `BlogPost` — title, slug, content, category, status (draft/published), author, tags, readCount.
 - `Contact` — name, email, phone, serviceInterested, message, isRead, isReplied.
 - `Service` — serviceName, description, icon, pricing, isActive, displayOrder.
 - `Testimonial` — name, role, quote, avatarUrl, isPublished.
+
+Added in Phase 1 (see `docs/ASSUMPTIONS.md` for the full rationale and verification):
+- `BusinessCategory`, `Business`, `BusinessMember` — the business directory + registration domain.
+- `Project`, `ProjectService` (links to the existing `Service` model) — the projects portfolio.
+- `SupportRequest`, `SupportMessage` — the support-ticket workflow.
+- `MediaAsset` — public/private file metadata (storage itself is still local `uploads/`; see §H security notes for the gap this doesn't yet close).
+- `Notification`, `AuditLog`, `PlatformSetting` — cross-cutting platform concerns.
+
+No new backend routes or frontend pages exist for these yet — Phase 1 was data-model only.
 
 **Dead code:** `backend/src/models/*.js` are legacy Mongoose schemas for Mongo. `connectDB()` always prefers Prisma when `DATABASE_URL` is set (it always is), so the Mongoose path and the `mongodb/` and `mongo` docker service are **unused**. Safe to remove once confirmed.
 

@@ -28,6 +28,18 @@ model User {
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 
+  // Platform foundation relations (see schema additions below User/Service/BlogPost/Contact)
+  businessesOwned         Business[]       @relation("BusinessOwner")
+  businessesReviewed      Business[]       @relation("BusinessReviewer")
+  businessMemberships     BusinessMember[]
+  supportRequestsCreated  SupportRequest[] @relation("SupportRequestCreator")
+  supportRequestsAssigned SupportRequest[] @relation("SupportRequestAssignee")
+  supportMessages         SupportMessage[]
+  mediaAssets             MediaAsset[]
+  notifications           Notification[]
+  auditLogs               AuditLog[]
+  platformSettingsUpdated PlatformSetting[]
+
   @@index([email, isActive])
   @@index([role])
 
@@ -89,6 +101,8 @@ model Service {
   @@index([serviceName])
   @@index([isActive])
   @@index([displayOrder])
+
+  projects ProjectService[]
 }
 
 model Testimonial {
@@ -103,5 +117,278 @@ model Testimonial {
 
   @@index([isPublished])
   @@index([createdAt])
+}
+
+// ============================================================
+// PLATFORM FOUNDATION — business directory, projects portfolio,
+// and support-request workflow, per
+// ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md Part G.
+//
+// `Contact` already serves the blueprint's "Enquiry" role and
+// `BlogPost` already serves its "Article"/Insights role, so
+// neither is duplicated here (see docs/ARCHITECTURE.md §6).
+//
+// Status/role fields are plain strings, matching the convention
+// already used by BlogPost.status, Service.isActive, etc. in this
+// schema, validated in application code (see
+// backend/src/constants/*.js) rather than DB-level enums.
+// ============================================================
+
+model BusinessCategory {
+  id           String   @id @default(uuid())
+  name         String
+  slug         String   @unique
+  description  String?
+  isActive     Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  businesses Business[]
+
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+model Business {
+  id          String   @id @default(uuid())
+  ownerUserId String
+  owner       User     @relation("BusinessOwner", fields: [ownerUserId], references: [id])
+
+  name            String
+  slug            String   @unique
+  legalName       String?
+  description     String
+  categoryId      String?
+  category        BusinessCategory? @relation(fields: [categoryId], references: [id])
+  country         String
+  state           String
+  city            String
+  businessEmail   String?
+  publicPhone     String?
+  websiteUrl      String?
+  logoMediaId     String?
+  logoMedia       MediaAsset? @relation(fields: [logoMediaId], references: [id])
+  businessStage   String?  // idea | startup | operating | growing | established
+  registrationNumber String?
+
+  // draft | pending_review | approved | rejected | suspended
+  status      String   @default("pending_review")
+  isPublic    Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+
+  publicConsentAt      DateTime?
+  publicConsentVersion String?
+
+  reviewedByUserId String?
+  reviewedBy       User?    @relation("BusinessReviewer", fields: [reviewedByUserId], references: [id])
+  reviewedAt       DateTime?
+  rejectionReason  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members         BusinessMember[]
+  supportRequests SupportRequest[]
+  projects        Project[]
+
+  @@index([status])
+  @@index([isPublic])
+  @@index([isFeatured])
+  @@index([categoryId])
+  @@index([ownerUserId])
+}
+
+model BusinessMember {
+  id         String @id @default(uuid())
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id])
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+
+  // owner | member — per-business role, distinct from the global User.role
+  membershipRole String @default("owner")
+  // active | invited | removed
+  status         String @default("active")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([businessId, userId])
+  @@index([userId])
+}
+
+model Project {
+  id      String @id @default(uuid())
+  title   String
+  slug    String @unique
+  summary String
+
+  challenge    String?
+  solution     String?
+  deliverables String?
+
+  coverImageUrl String?
+
+  // concept | in_progress | completed
+  projectStatus String @default("concept")
+  // draft | published | archived
+  publicationStatus String @default("draft")
+  isFeatured Boolean @default(false)
+
+  businessId String?
+  business   Business? @relation(fields: [businessId], references: [id])
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  verifiedOutcomes String?
+
+  seoTitle       String?
+  seoDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  services ProjectService[]
+
+  @@index([publicationStatus])
+  @@index([projectStatus])
+  @@index([isFeatured])
+  @@index([businessId])
+}
+
+model ProjectService {
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@id([projectId, serviceId])
+}
+
+model SupportRequest {
+  id            String @id @default(uuid())
+  referenceCode String @unique
+
+  businessId      String
+  business        Business @relation(fields: [businessId], references: [id])
+  createdByUserId String
+  createdBy       User     @relation("SupportRequestCreator", fields: [createdByUserId], references: [id])
+
+  title          String
+  description    String
+  // Website/mobile app | Data analytics/BI | AI/automation | Business development |
+  // Digital skills/training | Other  (kept to Abuhub's existing service list —
+  // no Solar/CCTV categories per the brand decision in docs/ASSUMPTIONS.md)
+  category       String
+  desiredOutcome String?
+  // low | normal | high
+  urgency        String  @default("normal")
+  budgetRange    String?
+  preferredTimeframe String?
+  preferredContactMethod String?
+
+  // submitted | under_review | needs_information | accepted | in_progress |
+  // on_hold | completed | declined | cancelled
+  status String @default("submitted")
+
+  assignedToUserId String?
+  assignedTo        User?   @relation("SupportRequestAssignee", fields: [assignedToUserId], references: [id])
+
+  closedAt  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  messages SupportMessage[]
+
+  @@index([businessId])
+  @@index([status])
+  @@index([assignedToUserId])
+  @@index([createdAt])
+}
+
+model SupportMessage {
+  id        String @id @default(uuid())
+  requestId String
+  request   SupportRequest @relation(fields: [requestId], references: [id])
+
+  authorUserId String
+  author       User   @relation(fields: [authorUserId], references: [id])
+
+  body String
+  // customer_visible | internal — internal notes must never reach business-user queries
+  visibility String @default("customer_visible")
+
+  createdAt DateTime @default(now())
+
+  @@index([requestId])
+  @@index([visibility])
+}
+
+model MediaAsset {
+  id               String @id @default(uuid())
+  storageKey       String
+  originalFilename String
+  mimeType         String
+  sizeBytes        Int
+  altText          String?
+  // public | private
+  visibility       String @default("public")
+
+  uploadedByUserId String
+  uploadedBy       User   @relation(fields: [uploadedByUserId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  businesses Business[]
+
+  @@index([visibility])
+  @@index([uploadedByUserId])
+}
+
+model Notification {
+  id      String @id @default(uuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+
+  type String
+  title String
+  body  String?
+
+  relatedEntityType String?
+  relatedEntityId   String?
+
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([readAt])
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  actorUserId   String?
+  actor         User?    @relation(fields: [actorUserId], references: [id])
+  action        String
+  entityType    String
+  entityId      String
+  // JSON-encoded metadata; must exclude secrets/sensitive payloads (see docs/ASSUMPTIONS.md)
+  metadata      String?
+  createdAt     DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorUserId])
+  @@index([createdAt])
+}
+
+model PlatformSetting {
+  key             String   @id
+  // JSON-encoded value
+  value           String
+  updatedByUserId String?
+  updatedBy       User?    @relation(fields: [updatedByUserId], references: [id])
+  updatedAt       DateTime @updatedAt
 }
 

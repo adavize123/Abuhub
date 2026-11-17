@@ -17,6 +17,39 @@ security, money, legal obligations, data migration, or irreversible changes."*
 
 ## Resolved work
 
+### Phase 1 — data-model foundation (completed 2026-11-17)
+- Added 11 new Prisma models per blueprint §21, scoped to the "keep current brand, add
+  platform features" decision above: `BusinessCategory`, `Business`, `BusinessMember`,
+  `Project`, `ProjectService` (reuses the existing `Service` model, as the blueprint
+  allows), `SupportRequest`, `SupportMessage`, `MediaAsset`, `Notification`, `AuditLog`,
+  `PlatformSetting`. `Contact` continues to serve as the blueprint's "Enquiry" and
+  `BlogPost` as its "Article"/Insights model — neither was duplicated.
+- Status/role fields are plain validated strings (e.g. `Business.status`:
+  `pending_review|approved|rejected|suspended`; `SupportRequest.status`: the blueprint's
+  9-state list), matching this schema's existing convention rather than introducing
+  Prisma enums.
+- `SupportRequest.category` deliberately excludes Solar/CCTV per the brand decision — it's
+  scoped to Abuhub's existing service list (Web/App dev, AI/automation, Data analytics,
+  Business development, Digital skills, Other).
+- Generated migration `20261117064444_add_platform_foundation` (pure additive `CREATE
+  TABLE`s, zero `ALTER`/`DROP` on existing tables), applied via `prisma migrate deploy`
+  (non-interactive; `migrate dev` requires a TTY this environment doesn't have).
+  Also reconciled `20260520130000_add_testimonials`, which existed on disk but had never
+  been recorded in `_prisma_migrations` — applied with `CREATE TABLE IF NOT EXISTS`, so
+  this was a no-op on the already-existing table, not a re-creation.
+- Verified before and after: all pre-existing data intact (8 users, 1 blog post, 6
+  services, 12 testimonials, 3 contacts — exact row-level content compared, not just
+  counts). All 11 new tables confirmed present via direct SQL query. Regenerated
+  `@prisma/client`, confirmed all 11 new model accessors are live
+  (`prisma.business.count()` etc. actually execute). Full regression pass after restart:
+  public reads (`/api/blog`, `/api/services`) return 200, the admin-only writes fixed
+  earlier correctly return 401 without a token, login still works, frontend home and
+  `/admin/blog` both return 200.
+- Scope boundary: this phase is data model only, per the blueprint's own Phase 1
+  acceptance criterion ("migration and build succeed"). No new backend routes or
+  frontend pages were added yet — that's Phase 2 (public CMS: services/projects
+  catalogue) and Phase 3/4 (business registration, portal, support requests).
+
 ### Open write-access gap on blog/contact/services (fixed 2026-11-17)
 - Added `authMiddleware` + `adminMiddleware` to all write/delete routes on
   `backend/src/routes/blogRoutes.js`, `contactRoutes.js`, and `serviceRoutes.js`
