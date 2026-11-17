@@ -241,6 +241,86 @@ export const createService = async (formData) => {
 };
 
 // ==========================================
+// PROJECTS API CALLS
+// ==========================================
+
+/**
+ * Get all projects
+ * @param {Object} params - Query parameters (publicationStatus, projectStatus, featured, etc.)
+ * @returns {Promise<Array>} - Array of projects
+ */
+export const fetchProjects = async (params = {}) => {
+  try {
+    const response = await axiosInstance.get('/projects', { params });
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching projects:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * Get single project by ID or slug
+ * @param {string} id - Project ID or slug
+ * @returns {Promise<Object>} - Project data
+ */
+export const fetchProjectById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/projects/${id}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching project:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * Create new project (admin)
+ * @param {Object} data - Project data
+ * @returns {Promise<Object>} - Created project
+ */
+export const createProject = async (data) => {
+  try {
+    const response = await axiosInstance.post('/projects', data);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error creating project:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * Update project (admin)
+ * @param {string} id - Project ID
+ * @param {Object} data - Updated project data
+ * @returns {Promise<Object>} - Updated project
+ */
+export const updateProject = async (id, data) => {
+  try {
+    const response = await axiosInstance.put(`/projects/${id}`, data);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error updating project:', error.message);
+    throw error;
+  }
+};
+
+/**
+ * Delete project (admin)
+ * @param {string} id - Project ID
+ * @returns {Promise<Object>} - Deletion confirmation
+ */
+export const deleteProject = async (id) => {
+  try {
+    const response = await axiosInstance.delete(`/projects/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting project:', error.message);
+    throw error;
+  }
+};
+
+// ==========================================
 // ERROR HANDLING
 // ==========================================
 

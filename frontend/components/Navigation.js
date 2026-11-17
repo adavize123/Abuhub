@@ -20,9 +20,9 @@ export default function Navigation() {
   const { isAuthenticated, user, logout, isLoading } = useAuth();
 
   const navLinks = [
-    { name: 'Work', href: '#work' },
     { name: 'Services', href: '#services' },
-    { name: 'Why Us', href: '#why-us' },
+    { name: 'Projects', href: '/projects' },
+    { name: 'About', href: '/about' },
     { name: 'Blog', href: '/blog' },
   ];
 

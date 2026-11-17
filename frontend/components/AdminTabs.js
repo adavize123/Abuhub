@@ -16,6 +16,7 @@ const ADMIN_TABS = [
   { name: 'Users', href: '/admin/users' },
   { name: 'Messages', href: '/admin/messages' },
   { name: 'Services', href: '/admin/services' },
+  { name: 'Projects', href: '/admin/projects' },
   { name: 'Testimonials', href: '/admin/testimonials' },
   { name: 'Analytics', href: '/admin/analytics' },
   { name: 'Settings', href: '/admin/settings' },

@@ -16,10 +16,11 @@ export default function Footer() {
 
   const quickLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Why Abuhub', href: '#why-us' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/#services' },
+    { name: 'Projects', href: '/projects' },
     { name: 'Blog', href: '/blog' },
-    { name: 'Services', href: '#services' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Contact', href: '/#contact' },
   ];
 
   const services = ['Web Development', 'App Development', 'AI Training', 'Data Analysis', 'Business Support'];
@@ -147,7 +148,7 @@ export default function Footer() {
               {['Privacy Policy', 'Terms of Service', 'Contact'].map((link) => (
                 <Link
                   key={link}
-                  href={link === 'Contact' ? '#contact' : '#'}
+                  href={link === 'Contact' ? '/#contact' : '#'}
                   className="hover:text-brand-400 transition-colors duration-300"
                 >
                   {link}

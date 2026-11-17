@@ -117,9 +117,11 @@ export default function ServicesSection() {
 
                     {/* Content */}
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold font-poppins mb-3 text-white group-hover:text-brand-300 transition-colors duration-300">
-                        {service.serviceName}
-                      </h3>
+                      <Link href={`/services/${service.id}`}>
+                        <h3 className="text-xl font-bold font-poppins mb-3 text-white group-hover:text-brand-300 transition-colors duration-300">
+                          {service.serviceName}
+                        </h3>
+                      </Link>
                       <p className="text-cream-100/55 mb-6 line-clamp-3 leading-relaxed">
                         {service.shortDescription || service.description}
                       </p>

@@ -15,6 +15,7 @@ import blogRoutes from './routes/blogRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -60,6 +61,7 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/projects', projectRoutes);
 
 /**
  * Root endpoint - API information
@@ -74,6 +76,8 @@ app.get('/api', (req, res) => {
       blog: '/api/blog',
       contact: '/api/contact',
       services: '/api/services',
+      testimonials: '/api/testimonials',
+      projects: '/api/projects',
       health: '/health',
     },
   });
