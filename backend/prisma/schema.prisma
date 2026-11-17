@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                      String   @id @default(uuid())
+  email                   String   @unique
+  password                String
+  firstName               String
+  lastName                String
+  profileImage            String?
+  bio                     String?  @default("")
+  role                    String   @default("USER")
+  isActive                Boolean  @default(true)
+  isEmailVerified         Boolean  @default(false)
+  emailVerificationToken  String?
+  emailVerificationExpires DateTime?
+  passwordResetToken      String?
+  passwordResetExpires    DateTime?
+  lastLogin               DateTime?
+  loginAttempts           Int      @default(0)
+  lockUntil               DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([email, isActive])
+  @@index([role])
+
+}
+
+model BlogPost {
+  id             String   @id @default(uuid())
+  title          String
+  slug           String?  @unique
+  content        String
+  imageUrl       String?
+  imagePublicId  String?
+  category       String   @default("Others")
+  status         String   @default("draft")
+  author         String   @default("Abuhub Team")
+  excerpt        String?
+  tags           String?
+  readCount      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+}
+
+model Contact {
+  id                String   @id @default(uuid())
+  name              String
+  email             String
+  phone             String?
+  serviceInterested String   @default("General Inquiry")
+  message           String
+  isRead            Boolean  @default(false)
+  isReplied         Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([email])
+  @@index([createdAt])
+  @@index([isRead])
+}
+
+model Service {
+  id            String   @id @default(uuid())
+  serviceName   String   @unique
+  description   String
+  shortDescription String?
+  imageUrl      String?
+  imagePublicId String?
+  icon          String   @default("⚙️")
+  pricing       String   @default("Contact for pricing")
+  isActive      Boolean  @default(true)
+  displayOrder  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([serviceName])
+  @@index([isActive])
+  @@index([displayOrder])
+}
+
+model Testimonial {
+  id         String   @id @default(uuid())
+  name       String
+  role       String?
+  quote      String
+  avatarUrl  String?
+  isPublished Boolean @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([isPublished])
+  @@index([createdAt])
+}
+

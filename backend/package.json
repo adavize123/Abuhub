@@ -1,0 +1,41 @@
+{
+  "name": "abuhub-backend",
+  "version": "1.0.0",
+  "description": "ABUHUB - Modern Digital Solutions Platform Backend API",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "abuhub",
+    "api",
+    "blog",
+    "services"
+  ],
+  "author": "Abuhub Team",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "5.12.0",
+    "bcryptjs": "2.4.3",
+    "cloudinary": "1.40.0",
+    "cors": "2.8.5",
+    "dotenv": "16.3.1",
+    "express": "4.18.2",
+    "express-async-errors": "3.1.1",
+    "express-validator": "7.0.0",
+    "jsonwebtoken": "9.0.2",
+    "mongoose": "7.5.0",
+    "multer": "1.4.5-lts.1",
+    "nodemailer": "^6.10.1",
+    "uuid": "9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prisma": "5.12.0"
+  }
+}

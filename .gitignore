@@ -1,0 +1,39 @@
+# Dependencies
+**/node_modules/
+
+# Environment variables
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.production
+
+# Build output
+**/.next/
+**/dist/
+**/build/
+
+# Database
+**/*.db
+**/*.db-journal
+**/*.sqlite
+
+# Uploads / local media
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Vestigial mongo data (unused — see docs/ARCHITECTURE.md §2)
+mongodb/data/
+mongodb/log/
+
+# Logs
+**/*.log
+npm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

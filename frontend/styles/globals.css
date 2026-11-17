@@ -1,0 +1,591 @@
+/**
+ * Global Tailwind CSS
+ * Base styles and global utilities
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+* {
+  @apply m-0 p-0 box-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-dark-bg text-white;
+  font-family: var(--font-inter);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins);
+  @apply font-bold;
+}
+
+/* Glass Morphism Effect */
+.glassmorphism {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-gradient-to-r from-accent-cyan via-accent-purple to-primary-600;
+  @apply bg-clip-text text-transparent;
+}
+
+/* Button Styles */
+.btn-primary {
+  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply bg-gradient-to-r from-accent-cyan to-accent-purple;
+  @apply hover:scale-105 hover:shadow-lg hover:shadow-accent-cyan/50;
+  @apply text-dark-bg;
+  @apply active:scale-95 active:shadow-md;
+  @apply focus:outline-none focus:ring-2 focus:ring-accent-cyan focus:ring-offset-2 focus:ring-offset-dark-bg;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-primary:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-secondary {
+  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply border-2 border-accent-cyan;
+  @apply hover:bg-accent-cyan hover:text-dark-bg;
+  @apply active:scale-95;
+  @apply focus:outline-none focus:ring-2 focus:ring-accent-cyan focus:ring-offset-2 focus:ring-offset-dark-bg;
+}
+
+.btn-secondary-purple {
+  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  @apply border-2 border-accent-purple;
+  @apply hover:bg-accent-purple;
+  @apply active:scale-95;
+  @apply focus:outline-none focus:ring-2 focus:ring-accent-purple focus:ring-offset-2 focus:ring-offset-dark-bg;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  @apply transition-all duration-300;
+  @apply hover:scale-105 hover:shadow-2xl hover:shadow-accent-purple/20;
+}
+
+/* Input Styles */
+input,
+textarea,
+select {
+  @apply bg-dark-surface/50 border border-dark-border rounded-lg;
+  @apply px-4 py-2 text-white;
+  @apply placeholder-white/40;
+  @apply transition-all duration-300;
+  position: relative;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  @apply outline-none border-accent-cyan;
+  @apply ring-2 ring-accent-cyan/20;
+  @apply bg-dark-surface/80;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(138, 43, 226, 0.05);
+}
+
+/* Visible focus for keyboard users */
+:focus-visible {
+  outline: 3px solid rgba(0, 240, 255, 0.18);
+  outline-offset: 3px;
+}
+
+input::placeholder {
+  @apply text-white/40 transition-opacity duration-300;
+}
+
+input:focus::placeholder {
+  @apply text-white/60;
+}
+
+/* Form animations */
+input:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown) {
+  @apply border-red-500/50;
+  animation: shake 0.3s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-accent-purple rounded-full transition-colors duration-300;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent-cyan;
+}
+
+/* Custom Cursor */
+/* Custom Cursor (opt-in) - apply by adding `custom-cursor` class to body or a container */
+.custom-cursor * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6" fill="%2300f0ff" opacity="0.6"/><circle cx="16" cy="16" r="10" fill="none" stroke="%238a2be2" stroke-width="1" opacity="0.3"/></svg>') 16 16, auto;
+}
+
+.custom-cursor a,
+.custom-cursor button {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="7" fill="%2300f0ff" opacity="0.8"/><circle cx="16" cy="16" r="12" fill="none" stroke="%238a2be2" stroke-width="1.5" opacity="0.5"/></svg>') 16 16, pointer;
+}
+
+/* Skip link (visually hidden until focused) */
+.skip-link {
+  @apply sr-only;
+}
+.skip-link:focus:not(:focus-visible) {
+  @apply sr-only;
+}
+.skip-link:focus:focus-visible {
+  @apply not-sr-only fixed top-4 left-4 z-50 bg-dark-surface/90 text-white px-4 py-2 rounded-md shadow-lg;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.6s ease-out;
+}
+
+.page-transition-in {
+  animation: pageTransitionIn 0.5s ease-out;
+}
+
+.page-transition-out {
+  animation: pageTransitionOut 0.5s ease-in;
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s infinite;
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+.spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* New Animation Keyframes */
+@keyframes pageTransitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageTransitionOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 240, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(0, 240, 255, 0.6);
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Respect reduced motion preference for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable custom cursor when reduced motion requested */
+  .custom-cursor * {
+    cursor: default !important;
+  }
+}
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+}
+
+/* ============================================================
+   BRAND DESIGN SYSTEM — light "cream / ink / green" theme
+   Used across the public marketing site (home, blog, auth).
+   Admin/dashboard keep the original dark theme above untouched.
+   ============================================================ */
+
+.site-light {
+  @apply bg-cream-200 text-ink-900;
+}
+
+.section-cream {
+  @apply bg-cream-200;
+}
+
+.section-cream-alt {
+  @apply bg-cream-100;
+}
+
+.section-ink {
+  @apply bg-ink-gradient text-cream-100;
+}
+
+/* Gradient brand text: navy fading into the leaf green */
+.brand-text {
+  @apply bg-gradient-to-r from-ink-900 via-brand-700 to-brand-500 bg-clip-text text-transparent;
+}
+
+/* Subtle animated gradient for hero headline accents */
+.brand-text-animated {
+  @apply bg-gradient-to-r from-ink-900 via-brand-600 to-brand-400 bg-clip-text text-transparent bg-[length:200%_auto];
+  animation: gradientPan 6s ease infinite;
+}
+
+.badge-brand {
+  @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs sm:text-sm font-semibold tracking-wide;
+}
+
+.badge-ink {
+  @apply inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-cream-100 text-xs sm:text-sm font-semibold tracking-wide backdrop-blur-sm;
+}
+
+/* Primary CTA — leaf-green gradient */
+.btn-brand {
+  @apply relative inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white;
+  @apply bg-brand-gradient bg-[length:160%_auto] transition-all duration-300;
+  @apply shadow-brand-glow hover:shadow-[0_16px_50px_-8px_rgba(31,153,84,0.6)] hover:bg-right;
+  @apply active:scale-[0.97] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-200;
+}
+
+/* Secondary CTA — outlined ink */
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold;
+  @apply border-2 border-ink-900 text-ink-900 transition-all duration-300;
+  @apply hover:bg-ink-900 hover:text-cream-100 active:scale-[0.97];
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-700 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-200;
+}
+
+/* Ghost CTA — for use on dark ink sections */
+.btn-ghost-light {
+  @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-semibold;
+  @apply border-2 border-white/25 text-cream-50 transition-all duration-300;
+  @apply hover:bg-white hover:text-ink-900 active:scale-[0.97];
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-900;
+}
+
+/* Card surface for the light theme */
+.card-brand {
+  @apply bg-white rounded-3xl border border-ink-100 shadow-card transition-all duration-300;
+}
+
+.card-brand-hover {
+  @apply hover:-translate-y-2 hover:shadow-soft hover:border-brand-200;
+}
+
+/* Inputs for the light theme */
+.input-brand {
+  @apply w-full px-4 py-3.5 bg-white border border-ink-100 rounded-xl text-ink-900 placeholder-ink-300;
+  @apply transition-all duration-300 focus:outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-100;
+}
+
+.label-brand {
+  @apply block text-sm font-semibold text-ink-700 mb-2;
+}
+
+/* Decorative blurred blob background elements */
+.brand-blob {
+  @apply absolute rounded-full blur-3xl pointer-events-none;
+  animation: blob 14s ease-in-out infinite;
+}
+
+/* Faint grain overlay for depth on ink sections */
+.grain-overlay {
+  @apply pointer-events-none absolute inset-0 bg-noise mix-blend-overlay opacity-60;
+}
+
+.divider-fade {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(10, 17, 32, 0.12), transparent);
+}
+
+.divider-fade-light {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+}
+
+/* ============================================================
+   STUDIO DESIGN SYSTEM — bold dark-canvas "indie studio" theme
+   This supersedes the light theme above for the public site.
+   ============================================================ */
+
+.site-studio {
+  @apply bg-canvas-gradient text-cream-100;
+}
+
+/* Floating pill navigation */
+.pill-nav {
+  @apply flex items-center justify-between gap-3 px-3 py-2 sm:px-4 sm:py-2.5 rounded-full;
+  @apply bg-ink-900/70 border border-white/10 backdrop-blur-2xl;
+  @apply shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)];
+}
+
+/* Big rounded hero card with the vivid brand gradient */
+.hero-card {
+  @apply relative overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem] bg-studio-gradient;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: theme('backgroundImage.studio-gradient-soft');
+  pointer-events: none;
+}
+
+.badge-studio {
+  @apply inline-flex items-center gap-2 pl-1.5 pr-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs sm:text-sm font-semibold backdrop-blur-sm;
+}
+
+.avatar-stack {
+  @apply flex items-center -space-x-2;
+}
+
+.avatar-chip {
+  @apply w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-ink-900/80 flex items-center justify-center text-[10px] font-bold text-white shadow-sm;
+}
+
+/* Solid pill CTA — for use on the vivid gradient hero */
+.btn-pill-solid {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-ink-900 bg-cream-50;
+  @apply transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.35)] active:scale-95;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
+}
+
+/* Outlined pill CTA — for use on the vivid gradient hero */
+.btn-pill-outline {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white border-2 border-white/30;
+  @apply transition-all duration-300 hover:bg-white hover:text-ink-900 hover:scale-[1.03] active:scale-95;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
+}
+
+/* Green pill CTA — for use on the dark canvas (off the hero) */
+.btn-pill-brand {
+  @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white;
+  @apply bg-brand-gradient bg-[length:160%_auto] transition-all duration-300;
+  @apply shadow-brand-glow hover:shadow-[0_16px_50px_-8px_rgba(31,153,84,0.6)] hover:bg-right hover:scale-[1.03] active:scale-95;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-ink-950;
+}
+
+.btn-pill-ghost {
+  @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-cream-100 border-2 border-white/15;
+  @apply transition-all duration-300 hover:border-white/40 hover:bg-white/5 hover:scale-[1.03] active:scale-95;
+}
+
+/* Dark glass card used across services/about/process/testimonials */
+.card-studio {
+  @apply relative bg-ink-900/50 border border-white/10 rounded-3xl backdrop-blur-sm transition-all duration-300;
+}
+
+.card-studio-hover {
+  @apply hover:-translate-y-2 hover:border-brand-400/40 hover:bg-ink-800/60 hover:shadow-[0_24px_60px_-20px_rgba(31,153,84,0.35)];
+}
+
+.input-studio {
+  @apply w-full px-4 py-3.5 bg-white/5 border border-white/10 rounded-xl text-cream-50 placeholder-cream-100/30;
+  @apply transition-all duration-300 focus:outline-none focus:border-brand-400 focus:ring-4 focus:ring-brand-500/20;
+}
+
+.label-studio {
+  @apply block text-sm font-semibold text-cream-100/80 mb-2;
+}
+
+.eyebrow-studio {
+  @apply inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-brand-400;
+}
+
+/* Tilted collage tile */
+.tilt-tile {
+  @apply absolute rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-white/10;
+  animation: drift 7s ease-in-out infinite;
+}
+
+/* Marquee ticker */
+.marquee-row {
+  @apply flex items-center gap-8 whitespace-nowrap will-change-transform;
+  animation: marquee 26s linear infinite;
+}
+
+.marquee-row:hover {
+  animation-play-state: paused;
+}
+
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.studio-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
