@@ -75,11 +75,17 @@ module.exports = {
       backgroundImage: {
         'brand-gradient': 'linear-gradient(135deg, #177C43 0%, #1F9954 45%, #63CC8B 100%)',
         'ink-gradient': 'linear-gradient(135deg, #0A1120 0%, #1B2540 100%)',
+        /* v3 — restrained near-black with a faint corner glow, replacing the
+           loud saturated radial burst. This is the single highest-leverage
+           change: every page reusing .hero-card inherits the calmer look. */
         'studio-gradient':
-          'radial-gradient(135% 130% at 12% -10%, #4FD988 0%, #1F9954 22%, #0F4E2C 42%, #0B2A1C 62%, #0A1120 82%)',
+          'radial-gradient(120% 120% at 12% -10%, rgba(56,181,105,0.22) 0%, rgba(15,78,44,0.10) 28%, rgba(8,11,16,0) 58%), linear-gradient(180deg, #0D1117 0%, #08090C 100%)',
         'studio-gradient-soft':
-          'radial-gradient(120% 120% at 85% 0%, rgba(99,204,139,0.35) 0%, rgba(10,17,32,0) 55%)',
-        'canvas-gradient': 'linear-gradient(180deg, #0A1120 0%, #070B14 100%)',
+          'radial-gradient(120% 120% at 85% 0%, rgba(255,255,255,0.06) 0%, rgba(10,17,32,0) 55%)',
+        'canvas-gradient': 'linear-gradient(180deg, #0B0C0F 0%, #07080A 100%)',
+        /* v3 — soft diagonal light-sweep used behind hero content, à la Profound's careers page */
+        'light-sweep':
+          'linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.05) 55%, rgba(255,255,255,0) 70%)',
         'noise': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E\")",
       },
       animation: {
@@ -98,6 +104,7 @@ module.exports = {
         marquee: 'marquee 30s linear infinite',
         gradientPan: 'gradientPan 6s ease infinite',
         drift: 'drift 6s ease-in-out infinite',
+        beamDrift: 'beamDrift 14s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -161,6 +168,10 @@ module.exports = {
         gradientPan: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        beamDrift: {
+          '0%, 100%': { transform: 'translate(-8%, -4%) rotate(0deg)' },
+          '50%': { transform: 'translate(6%, 4%) rotate(2deg)' },
         },
       },
       boxShadow: {

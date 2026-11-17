@@ -1,6 +1,8 @@
 /**
  * Navigation Component
- * Floating pill nav — fixed, glassy, always centered above the page
+ * v3 — flat, minimal top bar (not a floating glass pill), inspired by
+ * tryprofound.com's restrained editorial header: small logo mark, plain
+ * text links, a ghost "Sign In" and a solid white primary CTA.
  */
 
 'use client';
@@ -54,49 +56,48 @@ export default function Navigation() {
   };
 
   return (
-    <div className="fixed top-3 sm:top-5 inset-x-0 z-50 px-3 sm:px-6">
-      <motion.nav
-        role="navigation"
-        aria-label="Main navigation"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="pill-nav max-w-5xl mx-auto"
-      >
+    <motion.header
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed top-0 inset-x-0 z-50"
+    >
+      <nav role="navigation" aria-label="Main navigation" className="nav-flat">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 pl-1 pr-3 shrink-0 group">
-          <span className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden bg-cream-50 ring-1 ring-white/20 flex-shrink-0">
-            <Image src="/images/logo.png" alt="Abuhub" fill sizes="36px" className="object-cover" priority />
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+          <span className="relative w-7 h-7 rounded-lg overflow-hidden bg-cream-50 ring-1 ring-white/15 flex-shrink-0">
+            <Image src="/images/logo.png" alt="Abuhub" fill sizes="28px" className="object-cover" priority />
           </span>
-          <span className="text-sm sm:text-base font-bold font-poppins text-white group-hover:text-brand-300 transition-colors">
+          <span className="text-[15px] font-bold font-poppins text-white tracking-tight">
             Abuhub
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden md:flex items-center gap-7">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="px-4 py-2 rounded-full text-sm font-medium text-cream-100/70 hover:text-white hover:bg-white/10 transition-all duration-300"
+              className="relative text-sm font-medium text-cream-100/55 hover:text-white transition-colors duration-200 group"
             >
               {link.name}
+              <span className="absolute -bottom-1.5 left-0 right-0 h-px bg-white scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left" />
             </Link>
           ))}
         </div>
 
         {/* Auth Section - Desktop */}
-        <div className="hidden md:flex items-center gap-2 pr-1">
+        <div className="hidden md:flex items-center gap-5">
           {!isLoading && !isAuthenticated ? (
             <>
               <Link
                 href="/login"
-                className="px-4 py-2 text-sm font-medium text-cream-100/70 hover:text-white transition-colors"
+                className="text-sm font-medium text-cream-100/55 hover:text-white transition-colors"
               >
                 Sign In
               </Link>
-              <Link href="/signup" className="btn-pill-brand !px-5 !py-2 text-sm">
+              <Link href="/signup" className="btn-pill-solid !px-5 !py-2 text-sm">
                 Start a project
               </Link>
             </>
@@ -104,14 +105,14 @@ export default function Navigation() {
             <div ref={userMenuRef} className="relative">
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-white/10 transition-all"
+                className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full hover:bg-white/5 transition-all"
                 aria-haspopup="true"
                 aria-expanded={isUserMenuOpen}
               >
                 <div className="w-7 h-7 rounded-full bg-brand-gradient flex items-center justify-center text-white font-semibold text-xs">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
-                <span className="text-cream-100/80 text-sm font-medium">
+                <span className="text-cream-100/70 text-sm font-medium">
                   {user?.name?.split(' ')[0] || 'User'}
                 </span>
               </button>
@@ -172,7 +173,7 @@ export default function Navigation() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden flex flex-col space-y-1.5 p-2.5 mr-1"
+          className="md:hidden flex flex-col space-y-1.5 p-2"
           aria-expanded={isOpen}
           aria-controls="mobile-menu"
           aria-label="Toggle navigation menu"
@@ -181,24 +182,24 @@ export default function Navigation() {
           <span className={`h-0.5 w-5 bg-white transition-opacity duration-300 ${isOpen ? 'opacity-0' : ''}`} />
           <span className={`h-0.5 w-5 bg-white transition-transform duration-300 ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
-      </motion.nav>
+      </nav>
 
       {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             id="mobile-menu"
-            initial={{ opacity: 0, y: -10, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -10, height: 0 }}
-            className="md:hidden max-w-5xl mx-auto mt-2 rounded-3xl bg-ink-900/95 border border-white/10 backdrop-blur-2xl overflow-hidden"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-ink-950/98 border-b border-white/10 backdrop-blur-2xl overflow-hidden"
           >
-            <div className="p-3 space-y-1">
+            <div className="p-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="block px-4 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all font-medium"
+                  className="block px-3 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all font-medium"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.name}
@@ -209,14 +210,14 @@ export default function Navigation() {
                   <>
                     <Link
                       href="/login"
-                      className="block px-4 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all font-medium"
+                      className="block px-3 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all font-medium"
                       onClick={() => setIsOpen(false)}
                     >
                       Sign In
                     </Link>
                     <Link
                       href="/signup"
-                      className="block px-4 py-3 btn-pill-brand text-center"
+                      className="block px-4 py-3 btn-pill-solid text-center"
                       onClick={() => setIsOpen(false)}
                     >
                       Start a project
@@ -226,14 +227,14 @@ export default function Navigation() {
                   <>
                     <Link
                       href="/dashboard"
-                      className="block px-4 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
+                      className="block px-3 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
                       onClick={() => setIsOpen(false)}
                     >
                       Dashboard
                     </Link>
                     <Link
                       href="/profile"
-                      className="block px-4 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
+                      className="block px-3 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
                       onClick={() => setIsOpen(false)}
                     >
                       Profile
@@ -241,7 +242,7 @@ export default function Navigation() {
                     {String(user?.role || '').toLowerCase() === 'admin' && (
                       <Link
                         href="/admin"
-                        className="block px-4 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
+                        className="block px-3 py-2.5 text-cream-100/80 hover:text-white rounded-xl hover:bg-white/5 transition-all"
                         onClick={() => setIsOpen(false)}
                       >
                         Admin Panel
@@ -252,7 +253,7 @@ export default function Navigation() {
                         handleLogout();
                         setIsOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2.5 text-red-400 rounded-xl hover:bg-white/5 transition-all"
+                      className="w-full text-left px-3 py-2.5 text-red-400 rounded-xl hover:bg-white/5 transition-all"
                     >
                       Logout
                     </button>
@@ -263,6 +264,6 @@ export default function Navigation() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.header>
   );
 }

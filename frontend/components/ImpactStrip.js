@@ -18,7 +18,7 @@ export default function ImpactStrip() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="relative px-3 sm:px-6 pt-16 sm:pt-24 pb-4">
+    <div className="relative px-4 sm:px-6 lg:px-8 pb-4">
       <motion.div
         initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

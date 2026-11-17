@@ -388,7 +388,7 @@ textarea:invalid:not(:placeholder-shown) {
 }
 
 .section-ink {
-  @apply bg-ink-gradient text-cream-100;
+  @apply bg-canvas-gradient text-cream-100;
 }
 
 /* Gradient brand text: navy fading into the leaf green */
@@ -490,9 +490,12 @@ textarea:invalid:not(:placeholder-shown) {
   @apply shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)];
 }
 
-/* Big rounded hero card with the vivid brand gradient */
+/* Big rounded hero card — v3: a calm near-black surface with a faint corner
+   glow, not a loud saturated gradient block. Every page that reuses this
+   (blog/about/projects headers, contact panel, CTA bands) inherits the
+   restrained look from this one definition. */
 .hero-card {
-  @apply relative overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem] bg-studio-gradient;
+  @apply relative overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem] bg-studio-gradient border border-white/[0.06];
 }
 
 .hero-card::before {
@@ -588,4 +591,57 @@ textarea:invalid:not(:placeholder-shown) {
 .studio-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+
+/* ============================================================
+   V3 — restrained near-black system layered on top of "studio".
+   Inspired by logiaweb.net (floating mockups + dotted connectors +
+   giant background wordmark) and tryprofound.com/careers (minimal
+   flat nav, soft diagonal light-sweep, single sparse accent color).
+   Nothing below removes the classes above — admin and earlier pages
+   keep working; new pages opt into this calmer look.
+   ============================================================ */
+
+/* Flat minimal top bar — replaces the floating glass pill for a more
+   editorial, Profound-style header */
+.nav-flat {
+  @apply flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 h-16 sm:h-[4.5rem];
+  @apply border-b border-white/[0.07] bg-ink-950/75 backdrop-blur-xl;
+}
+
+/* Soft diagonal light-sweep, meant to sit absolutely inside a relative
+   section with overflow-hidden — one per hero, used sparingly */
+.light-sweep-layer {
+  @apply pointer-events-none absolute -inset-[20%] bg-light-sweep;
+  animation: beamDrift 16s ease-in-out infinite;
+}
+
+/* Giant, barely-visible background wordmark that bleeds off the section
+   edge — pure CSS, no image. Use with a brand name as text content. */
+.bg-wordmark {
+  @apply pointer-events-none select-none absolute inset-x-0 bottom-0 text-center leading-none;
+  @apply font-poppins font-bold text-white/[0.035];
+  font-size: clamp(5rem, 18vw, 13rem);
+  transform: translateY(28%);
+}
+
+/* Muted capability/trust chip — grayscale by default, brightens on hover.
+   Used for Abuhub's own services row instead of fabricated client logos. */
+.pill-chip-muted {
+  @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold;
+  @apply bg-white/[0.03] border border-white/[0.08] text-cream-100/40;
+  @apply transition-all duration-300 hover:text-cream-100/90 hover:border-white/20 hover:bg-white/[0.06];
+}
+
+/* Abstract floating "device" mockup card — decorative only, not a real
+   product screenshot (keeps us honest per the no-fabrication rule while
+   still giving the hero visual texture, à la logiaweb's floating cards) */
+.mockup-card {
+  @apply absolute rounded-2xl border border-white/10 bg-ink-900/80 backdrop-blur-sm;
+  @apply shadow-[0_30px_60px_-20px_rgba(0,0,0,0.6)];
+}
+
+/* Small glowing dot marking the end of a dashed connector line */
+.connector-dot {
+  @apply absolute w-2 h-2 rounded-full bg-brand-400 shadow-[0_0_12px_2px_rgba(56,181,105,0.6)];
 }

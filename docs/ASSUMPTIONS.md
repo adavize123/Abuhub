@@ -71,6 +71,79 @@ security, money, legal obligations, data migration, or irreversible changes."*
   `GET /api/contact`). Frontend compiles clean and `/admin/blog`, `/admin/messages`
   still load (200) after the change.
 
+### Phase 2 — public website & CMS (completed 2026-11-17)
+- Backend: new `projectController.js`/`projectRoutes.js` — full CRUD on `/api/projects`,
+  public reads (defaults to `publicationStatus=published`, admin UI passes `all`),
+  admin-only writes (same `authMiddleware`+`adminMiddleware` pattern as everywhere else).
+  Wired into `server.js` and the `/api` root listing.
+- Frontend pages: `/about` (reuses the existing `AboutSection`/`ProcessSection` content —
+  no new facts invented, per blueprint rule 7), `/projects` listing with an **honest empty
+  state** (no seed/sample case studies — nothing to show yet, so it invites contact
+  instead of fabricating one), `/projects/[id]` detail, `/services/[id]` detail (uses the
+  Service model's `id`, not a slug — `Service` has no slug column and adding one wasn't
+  worth a schema change for this). Homepage service cards now link their titles to the
+  new detail pages.
+- Admin: new `/admin/projects` page, wired to the **real** API from the start (unlike
+  `/admin/services`, `/admin/users`, `/admin/analytics`, `/admin/settings`, which were
+  already pre-existing mock-data pages before this phase — see "Other pre-existing
+  issues" below; not fixed in this phase, flagged for a later one).
+- Nav/Footer: replaced the homepage-only `#work` anchor link with real `Projects`/`About`
+  page links; fixed footer links that were relative anchors (`#contact`, `#why-us`) and
+  would silently fail to scroll anywhere when clicked from a non-home page — made them
+  `/#contact` etc.
+- Verified: curl checks on every new route (public reads 200, unauth writes 401, detail
+  pages 200 with real and nonexistent ids), then full-browser screenshots (desktop) of
+  `/about`, `/projects` (empty state), `/services/[id]`, and the homepage services
+  section after the Link-wrapping edit — zero console/page errors, manual-scroll
+  screenshots used to rule out the project's known scroll-animation screenshot artifact
+  (sections appear blank in an auto full-page screenshot unless genuinely scrolled past
+  first; confirmed harmless in earlier phases too).
+- **Not independently verified:** the actual admin write path (create/edit/delete a
+  project while authenticated as admin) — self-escalating the dev test user's role for
+  testing purposes was correctly denied by the permission system ("Undermining
+  Oversight"), and that's the right call, not a bug to route around. The code reuses the
+  exact `authMiddleware`/`adminMiddleware` chain already proven to work end-to-end
+  earlier this session (blog/service/testimonial admin writes with a real admin
+  session), so this is a reasonable but unconfirmed-by-me gap — worth testing with a
+  real admin login.
+
+### v3 visual redesign (completed 2026-11-17)
+- Owner rejected the "studio" look built earlier this session as generic/AI-template,
+  with two concrete references: logiaweb.net's hero (floating device mockups joined by
+  dashed connector lines, a muted partner-logo row, a giant background wordmark bleeding
+  off the page edge) and tryprofound.com/careers (near-black canvas, a soft diagonal
+  light-sweep, a single sparse accent color, minimal flat nav, solid-white primary CTA
+  instead of a gradient).
+- Diagnosed the actual culprit as the loud saturated green radial gradient used for
+  `.hero-card`, reused identically across the home hero, blog/about/projects page
+  headers, the contact info panel, and every CTA band — that repetition is what read as
+  "template." Fixed at the single CSS definition (`studio-gradient` in
+  `tailwind.config.js`: now a calm near-black base with a faint corner glow, not a
+  full-saturation burst), which instantly recalibrated every page that reuses it without
+  touching their JSX.
+- Added v3-only utilities in `globals.css` (`.nav-flat`, `.light-sweep-layer`,
+  `.bg-wordmark`, `.pill-chip-muted`, `.mockup-card`, `.connector-dot`) — additive, the
+  pre-existing `.card-studio`/`.btn-pill-*`/etc. classes were kept so admin pages that
+  still reference them did not need to change.
+- Rewrote `Navigation.js` (flat minimal top bar, not a floating glass pill — matches the
+  Profound reference) and `HeroSection.js` (asymmetric layout: copy + sparse one-word
+  green accent on the left, a floating abstract "dashboard" and "mobile app" mockup pair
+  joined by a dashed SVG connector on the right, a giant low-opacity "ABUHUB" wordmark
+  bleeding off the bottom edge). The mockup cards are deliberately abstract decoration
+  (skeleton bars/rows), not fabricated product screenshots.
+- The capability row below the hero lists Abuhub's own services ("What we build") rather
+  than a fabricated client-logo row, since there are no real client logos to show — same
+  no-fabrication principle as the Phase 2 projects empty state above.
+- Fixed a resulting inconsistency: `.section-ink` (used by `Footer.js`) still pointed at
+  the old navy-blue gradient, creating a visible seam against the new near-black canvas.
+  Repointed it to `bg-canvas-gradient`.
+- Scope: homepage hero/nav/footer got bespoke rewrites; every other public page (about,
+  projects, services detail, blog, login, signup) inherited the calmer look for free via
+  the shared CSS classes, verified with real browser screenshots of each (zero console
+  errors). The admin panel was deliberately left untouched beyond inheriting the same
+  calmer shared classes — a third full admin reskin wasn't asked for and the existing one
+  is internally consistent.
+
 ## Still open
 
 ### Reference screenshots
