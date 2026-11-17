@@ -54,8 +54,12 @@ export default function Testimonials() {
   };
 
   return (
-    <section id="testimonials" aria-labelledby="testimonials-title" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section id="testimonials" aria-labelledby="testimonials-title" className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="brand-blob w-[26rem] h-[26rem] bg-white/[0.025] -top-20 -right-24" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <span className="eyebrow-studio">Client voices</span>
           <h2 id="testimonials-title" className="text-4xl md:text-5xl font-bold font-poppins mt-4 mb-4 text-white">

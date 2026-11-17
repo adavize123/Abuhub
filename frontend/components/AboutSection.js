@@ -52,7 +52,11 @@ export default function AboutSection() {
 
   return (
     <section id="why-us" ref={ref} className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="brand-blob w-[26rem] h-[26rem] bg-white/[0.025] -bottom-32 -left-20" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
         <div className="grid lg:grid-cols-[0.85fr,1.15fr] gap-14 items-start">
           {/* Left: framing copy */}
           <motion.div

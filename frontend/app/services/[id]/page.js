@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { fetchServiceById, fetchProjects } from '@/lib/api/client';
+import { getServiceIcon } from '@/lib/serviceIcons';
 import { toast } from 'react-toastify';
 
 export default function ServiceDetailPage() {
@@ -67,14 +68,16 @@ export default function ServiceDetailPage() {
     );
   }
 
+  const ServiceIcon = getServiceIcon(service.serviceName);
+
   return (
     <div className="min-h-screen pt-28 sm:pt-32 pb-16">
       <section className="relative px-3 sm:px-6">
         <div className="hero-card max-w-5xl mx-auto py-16 sm:py-20 px-6 sm:px-10">
           <div className="grain-overlay" aria-hidden="true" />
           <div className="relative">
-            <div className="w-16 h-16 rounded-2xl bg-white/15 flex items-center justify-center text-3xl mb-6">
-              {service.icon || '⚙️'}
+            <div className="w-16 h-16 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center mb-6">
+              <ServiceIcon className="w-7 h-7 text-brand-400" strokeWidth={1.75} />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold font-poppins mb-4 text-white">
               {service.serviceName}

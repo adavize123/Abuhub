@@ -43,7 +43,7 @@ function AdminServicesContent() {
       },
       {
         id: '2',
-        title: 'Mobile App Development',
+        title: 'App Development',
         description: 'Native and cross-platform mobile applications',
         icon: '📱',
         features: ['iOS & Android', 'User Friendly', 'Secure'],

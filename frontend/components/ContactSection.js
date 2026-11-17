@@ -164,6 +164,7 @@ export default function ContactSection() {
                 <option value="ai_training" className="bg-ink-900">AI Training</option>
                 <option value="data_analysis" className="bg-ink-900">Data Analysis</option>
                 <option value="business_support" className="bg-ink-900">Business Support</option>
+                <option value="ui_ux_design" className="bg-ink-900">UI/UX Design</option>
                 <option value="other" className="bg-ink-900">Other</option>
               </select>
             </motion.div>

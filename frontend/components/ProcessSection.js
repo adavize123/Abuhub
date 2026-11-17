@@ -50,8 +50,12 @@ export default function ProcessSection() {
   };
 
   return (
-    <section ref={ref} className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section ref={ref} className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="brand-blob w-[24rem] h-[24rem] bg-brand-600/[0.06] top-0 right-0" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}

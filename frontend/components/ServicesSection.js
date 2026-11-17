@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchServices } from '../lib/api/client';
 import { useScrollAnimation } from '../lib/hooks/useScrollAnimation';
+import { getServiceIcon } from '../lib/serviceIcons';
 import TiltCard from './TiltCard';
 
 function ServiceCardSkeletonDark() {
@@ -64,8 +65,14 @@ export default function ServicesSection() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section ref={ref} id="services" className="py-24 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-6xl mx-auto">
+    <section ref={ref} id="services" className="py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Ambient light — keeps the section from reading as a flat black void */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="brand-blob w-[28rem] h-[28rem] bg-brand-600/[0.07] top-0 right-0" />
+        <div className="absolute inset-0 bg-light-sweep opacity-40" />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -99,20 +106,21 @@ export default function ServicesSection() {
             viewport={{ once: true, amount: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
           >
-            {services.map((service, index) => (
+            {services.map((service, index) => {
+              const ServiceIcon = getServiceIcon(service.serviceName);
+              return (
               <motion.div key={service.id} variants={cardVariants} className="group h-full">
                 <TiltCard intensity={6} className="h-full">
                   <div className="card-studio card-studio-hover p-7 sm:p-8 h-full flex flex-col justify-between cursor-pointer">
                     {/* Icon */}
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl mb-6 group-hover:bg-brand-500/10 group-hover:border-brand-400/30 transition-colors duration-300">
-                      <motion.span
-                        className="block"
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-brand-500/10 group-hover:border-brand-400/30 transition-colors duration-300">
+                      <motion.div
                         aria-hidden="true"
-                        animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
+                        animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
                         transition={reduceMotion ? undefined : { duration: 3, repeat: Infinity, delay: index * 0.15 }}
                       >
-                        {service.icon || '⚙️'}
-                      </motion.span>
+                        <ServiceIcon className="w-6 h-6 text-brand-400" strokeWidth={1.75} />
+                      </motion.div>
                     </div>
 
                     {/* Content */}
@@ -147,7 +155,8 @@ export default function ServicesSection() {
                   </div>
                 </TiltCard>
               </motion.div>
-            ))}
+              );
+            })}
           </motion.div>
         )}
       </div>
@@ -173,7 +182,7 @@ const defaultServices = [
   },
   {
     id: '3',
-    serviceName: 'AI Training & Integration',
+    serviceName: 'AI Training',
     shortDescription: 'Practical AI adoption — from staff training to embedding AI features in your product.',
     icon: '🤖',
     pricing: 'Contact us',

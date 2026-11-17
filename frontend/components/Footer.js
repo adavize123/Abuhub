@@ -23,7 +23,7 @@ export default function Footer() {
     { name: 'Contact', href: '/#contact' },
   ];
 
-  const services = ['Web Development', 'App Development', 'AI Training', 'Data Analysis', 'Business Support'];
+  const services = ['Web Development', 'App Development', 'AI Training', 'Data Analysis', 'Business Support', 'UI/UX Design'];
 
   const socialLinks = [
     { name: 'Twitter', icon: '𝕏', href: 'https://twitter.com' },
