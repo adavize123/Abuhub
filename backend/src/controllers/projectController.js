@@ -1,7 +1,7 @@
 /**
  * Project Controller
  * Handles projects-portfolio CRUD operations
- * (ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md Part G §15)
+ * (see the architecture blueprint, docs/ARCHITECTURE.md)
  */
 
 import prisma from '../config/prismaClient.js';

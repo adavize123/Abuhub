@@ -1,6 +1,5 @@
 /**
  * Single Service Detail Page
- * (ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md Part B §6: /services/[slug])
  * Uses the Service model's id as the route param — Service has no slug column,
  * matching the simplest safe option (no schema change for a Phase 2 detail page).
  */

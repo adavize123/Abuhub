@@ -1,8 +1,8 @@
 /**
  * Projects Listing Page
  * Public projects portfolio — only publicationStatus=published records are shown.
- * No seed/sample projects are invented here (ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md
- * rule 7) — if nothing is published yet, an honest empty state invites contact instead.
+ * No seed/sample projects are invented here — if nothing is published yet,
+ * an honest empty state invites contact instead.
  */
 
 'use client';

@@ -1,8 +1,8 @@
 /**
  * About Page
  * Company overview — mission, values and approach.
- * Reuses the existing AboutSection/ProcessSection content (no new facts invented,
- * per ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md rule 7).
+ * Reuses the existing AboutSection/ProcessSection content — no new facts
+ * invented (see docs/ARCHITECTURE.md).
  */
 
 import AboutSection from '@/components/AboutSection';

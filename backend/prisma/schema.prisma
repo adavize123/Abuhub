@@ -121,8 +121,8 @@ model Testimonial {
 
 // ============================================================
 // PLATFORM FOUNDATION — business directory, projects portfolio,
-// and support-request workflow, per
-// ABUHUB_WEBSITE_ARCHITECTURE_CLAUDE_CODE.md Part G.
+// and support-request workflow, per the architecture blueprint
+// (see docs/ARCHITECTURE.md).
 //
 // `Contact` already serves the blueprint's "Enquiry" role and
 // `BlogPost` already serves its "Article"/Insights role, so

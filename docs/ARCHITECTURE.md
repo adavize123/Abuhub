@@ -62,10 +62,10 @@ No `/about`, `/services/[slug]`, `/projects*`, `/businesses*`, `/insights*`, `/c
 4. No rate limiting except the testimonial submission endpoint.
 5. No audit logging of admin actions.
 6. Uploaded files are served from a single public `uploads/` path — no public/private separation, so a "private attachment" concept (needed for support requests) doesn't exist yet.
-7. `user.role` was being compared **case-sensitively** against `'admin'` in 5 admin pages (`/admin`, `/admin/analytics`, `/admin/messages`, `/admin/services`, `/admin/settings`) while the DB stores `'ADMIN'` — this would have silently locked real admins out. **Already fixed** earlier in this session using the existing case-insensitive `isAdmin()` helper from `AuthContext`, since it was a pure correctness bug, not a scope decision.
+7. `user.role` was being compared **case-sensitively** against `'admin'` in 5 admin pages (`/admin`, `/admin/analytics`, `/admin/messages`, `/admin/services`, `/admin/settings`) while the DB stores `'ADMIN'` — this would have silently locked real admins out. **Already fixed** using the existing case-insensitive `isAdmin()` helper from `AuthContext`, since it was a pure correctness bug, not a scope decision.
 8. Role model is currently a free-text string with two values (`USER`/`ADMIN`). The blueprint's 6-role model (`super_admin`, `admin`, `support_agent`, `content_manager`, `business_owner`, `business_member`) does not exist yet.
 
-## 5. Current design system (just completed this session)
+## 5. Current design system
 
 A cohesive dark "studio" visual identity was built from scratch and applied to **every** page, including the admin panel: gradient hero card, tilted work collage, floating pill navigation, marquee ticker, mouse-reactive tilt cards (`components/TiltCard.js`), consistent card/button/input language (`card-studio`, `btn-pill-*`, `input-studio` — all defined in `globals.css`). Verified rendering end-to-end with real browser screenshots (desktop + mobile, logged-out and logged-in).
 
