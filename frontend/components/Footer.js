@@ -125,8 +125,19 @@ export default function Footer() {
                 </motion.a>
               ))}
             </div>
-            <p className="text-cream-100/50 text-xs leading-relaxed">
-              hello@abuhub.com<br />Abuja, Nigeria
+            <p className="text-cream-100/50 text-xs leading-relaxed space-y-1">
+              <a href="mailto:abuhubtech@outlook.com" className="block hover:text-brand-400 transition-colors">
+                abuhubtech@outlook.com
+              </a>
+              <a
+                href="https://wa.me/2349016879145"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block hover:text-brand-400 transition-colors"
+              >
+                0901 687 9145 (WhatsApp)
+              </a>
+              <span className="block">Abuja, Nigeria</span>
             </p>
           </motion.div>
         </motion.div>

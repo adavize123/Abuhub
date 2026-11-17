@@ -11,9 +11,12 @@ import { useForm } from 'react-hook-form';
 import { submitContactForm } from '../lib/api/client';
 import { useScrollAnimation } from '../lib/hooks/useScrollAnimation';
 
+const WHATSAPP_NUMBER = '2349016879145'; // 09016879145 in international format, no leading 0
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi Abuhub, I'd like to talk about a project.")}`;
+
 const contactPoints = [
-  { icon: '✉️', label: 'Email us', value: 'hello@abuhub.com' },
-  { icon: '📞', label: 'Call us', value: '+234 800 000 0000' },
+  { icon: '✉️', label: 'Email us', value: 'abuhubtech@outlook.com', href: 'mailto:abuhubtech@outlook.com' },
+  { icon: '📞', label: 'Call / WhatsApp', value: '0901 687 9145', href: 'tel:+2349016879145' },
   { icon: '📍', label: 'Based in', value: 'Abuja, Nigeria — working worldwide' },
 ];
 
@@ -83,23 +86,45 @@ export default function ContactSection() {
                 Whether you have a full brief or just an idea on a napkin, our team is ready
                 to help you shape it into a plan.
               </p>
-              <div className="space-y-5">
-                {contactPoints.map((c) => (
-                  <div key={c.label} className="flex items-start gap-3">
-                    <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-lg flex-shrink-0">
-                      {c.icon}
-                    </span>
-                    <div>
-                      <p className="text-white/50 text-xs uppercase tracking-wider">{c.label}</p>
-                      <p className="text-white font-medium">{c.value}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="space-y-5 mb-8">
+                {contactPoints.map((c) => {
+                  const Wrapper = c.href ? 'a' : 'div';
+                  return (
+                    <Wrapper
+                      key={c.label}
+                      {...(c.href ? { href: c.href } : {})}
+                      className={`flex items-start gap-3 ${c.href ? 'group -m-2 p-2 rounded-xl hover:bg-white/5 transition-colors' : ''}`}
+                    >
+                      <span className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center text-lg flex-shrink-0">
+                        {c.icon}
+                      </span>
+                      <div>
+                        <p className="text-white/50 text-xs uppercase tracking-wider">{c.label}</p>
+                        <p className={`text-white font-medium ${c.href ? 'group-hover:text-brand-300 transition-colors' : ''}`}>
+                          {c.value}
+                        </p>
+                      </div>
+                    </Wrapper>
+                  );
+                })}
               </div>
+
+              {/* WhatsApp CTA */}
+              <a
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-full font-semibold text-white bg-[#25D366] hover:bg-[#1fbd5a] transition-all duration-300 hover:scale-[1.02] active:scale-95"
+              >
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+                  <path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.5 1.33 5.02L2 22l5.1-1.34A9.95 9.95 0 0012.04 22c5.52 0 10-4.48 10-10s-4.48-10-10-10zm0 18.17c-1.6 0-3.17-.43-4.54-1.24l-.33-.19-3.03.8.81-2.95-.21-.3A8.17 8.17 0 013.87 12c0-4.5 3.66-8.17 8.17-8.17S20.21 7.5 20.21 12s-3.66 8.17-8.17 8.17zm4.48-6.12c-.25-.12-1.46-.72-1.68-.8-.23-.08-.39-.12-.56.12-.17.25-.64.8-.78.96-.14.17-.29.19-.53.06-.25-.12-1.03-.38-1.96-1.21-.72-.65-1.21-1.44-1.35-1.69-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.36-.77-1.86-.2-.49-.41-.42-.56-.43-.14-.01-.31-.01-.47-.01-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12 .17 1.73 2.64 4.19 3.71.59.25 1.04.4 1.4.52.59.19 1.12.16 1.54.1.47-.07 1.46-.6 1.66-1.18.21-.58.21-1.08.14-1.18-.06-.1-.23-.16-.48-.28z" />
+                </svg>
+                Chat on WhatsApp
+              </a>
             </div>
             <div className="relative divider-fade-light my-8" />
             <p className="relative text-white/50 text-sm">
-              Prefer async? Reach the team any time — we typically respond within one business day.
+              Prefer async? Reach us by email any time — we typically respond within one business day.
             </p>
           </motion.div>
 
